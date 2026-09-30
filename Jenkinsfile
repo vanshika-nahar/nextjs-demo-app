@@ -11,7 +11,7 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install App Dependencies') {
             steps {
                 sh 'npm ci'
             }
@@ -22,15 +22,72 @@ pipeline {
                 sh 'npm run build'
             }
         }
+
+        stage('Start Application') {
+            steps {
+                sh 'npm start > app.log 2>&1 & echo $! > app.pid'
+            }
+        }
+
+        stage('Checkout Automation') {
+            steps {
+                dir('automation') {
+                    git(
+                        branch: 'main',
+                        url: 'https://github.com/vanshika-nahar/nextjs-demo-automation.git'
+                    )
+                }
+            }
+        }
+
+        stage('Install Automation Dependencies') {
+            steps {
+                dir('automation') {
+                    sh 'npm ci'
+                }
+            }
+        }
+
+        stage('Install Playwright Browsers') {
+            steps {
+                dir('automation') {
+                    sh 'npx playwright install chromium'
+                }
+            }
+        }
+
+        stage('Wait for Application') {
+            steps {
+                dir('automation') {
+                    sh 'npx wait-on http://localhost:3000'
+                }
+            }
+        }
+
+        stage('Run Automation') {
+            steps {
+                dir('automation') {
+                    sh 'npm run test:bdd'
+                }
+            }
+        }
     }
 
     post {
+        always {
+            sh '''
+                if [ -f app.pid ]; then
+                    kill $(cat app.pid) || true
+                fi
+            '''
+        }
+
         success {
-            echo 'Application build passed.'
+            echo 'Application build and automation tests passed.'
         }
 
         failure {
-            echo 'Application build failed.'
+            echo 'Application build or automation tests failed.'
         }
     }
 }
