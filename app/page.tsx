@@ -105,6 +105,14 @@ export default function HomePage() {
             >
               Company
             </a>
+
+            <a
+              href="/principal"
+              data-testid="nav-principal"
+              className="text-sm font-medium transition-colors hover:text-primary"
+            >
+              Principal
+            </a>
           </nav>
 
           <a
