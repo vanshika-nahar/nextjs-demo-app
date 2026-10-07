@@ -1,0 +1,22 @@
+name: Smoke Tests
+
+on:
+  pull_request:
+    branches:
+      - stage
+
+jobs:
+  trigger-automation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger automation repository
+        run: |
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.AUTOMATION_TOKEN }}" \
+            https://api.github.com/repos/vanshika-nahar/nextjs-demo-automation/dispatches \
+            -d '{
+              "event_type": "run-smoke-tests"
+            }'
