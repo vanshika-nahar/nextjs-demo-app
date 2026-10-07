@@ -4,14 +4,19 @@ on:
   pull_request:
     branches:
       - stage
-    types:
-      - opened
-      - synchronize
-      - reopened
 
 jobs:
-  smoke-tests:
-    name: Run Smoke Tests
-    if: github.event.pull_request.base.ref == 'stage' && github.event.pull_request.head.ref == 'dev'
-    uses: https://github.com/Surety007/automation-testing/.github/workflows/smoke-tests.yml@main
-    secrets: inherit
+  trigger-automation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger automation repository
+        run: |
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.AUTOMATION_TOKEN }}" \
+            https://api.github.com/repos/vanshika-nahar/nextjs-demo-automation/dispatches \
+            -d '{
+              "event_type": "run-smoke-tests"
+            }'

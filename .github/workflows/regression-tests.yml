@@ -10,8 +10,14 @@ on:
       - reopened
 
 jobs:
-  regression-tests:
+  regression:
     name: Run Regression Tests
-    if: github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'stage'
-    uses: https://github.com/Surety007/automation-testing/.github/workflows/regression-tests.yml@main
-    secrets: inherit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger automation repository
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.AUTOMATION_REPO_TOKEN }}
+          repository: https://github.com/vanshika-nahar/nextjs-demo-automation
+          event-type: run-regression-tests
