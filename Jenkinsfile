@@ -119,8 +119,6 @@ pipeline {
         always {
             sh '''
                 if [ -f app.pid ]; then
-                    kill $(cat app.pid) || true
-                fi
                 kill $(cat app.pid) || true
                 fi
                 rm -rf node_modules

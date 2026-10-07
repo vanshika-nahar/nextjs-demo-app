@@ -18,7 +18,7 @@ interface UserFormData {
   role: string;
 }
 
-export default function UserPage() {
+export default function UserForm() {
   const [formData, setFormData] = useState<UserFormData>({
     name: '',
     email: '',
