@@ -70,17 +70,13 @@ pipeline {
         always {
             sh '''
                 if [ -f app.pid ]; then
-<<<<<<< main
                     kill $(cat app.pid) || true
                 fi
-=======
                 kill $(cat app.pid) || true
                 fi
-
                 rm -rf node_modules
                 rm -rf automation/node_modules
                 rm -rf .next/cache
->>>>>>> stage
             '''
         }
 

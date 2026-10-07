@@ -1,4 +1,3 @@
-<<<<<<< main
 'use client';
 
 import { FormEvent, useState } from 'react';
@@ -175,14 +174,6 @@ export default function UserPage() {
           )}
         </form>
       </div>
-=======
-import UserForm from '@/components/user-form';
-
-export default function UserPage() {
-  return (
-    <main className="container mx-auto px-6 py-10">
-      <UserForm />
->>>>>>> stage
     </main>
   );
 }
