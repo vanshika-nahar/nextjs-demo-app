@@ -1,0 +1,17 @@
+name: Regression Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  regression-tests:
+    name: Run Regression Tests
+    if: github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'stage'
+    uses: https://github.com/Surety007/automation-testing/.github/workflows/regression-tests.yml@main
+    secrets: inherit
