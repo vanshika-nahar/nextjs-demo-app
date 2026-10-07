@@ -20,6 +20,7 @@ pipeline {
         stage('Build Application') {
             steps {
                 sh 'npm run build'
+                sh 'rm -rf .next/cache'
             }
         }
 
@@ -47,15 +48,7 @@ pipeline {
                 }
             }
         }
-
-        stage('Install Playwright Browsers') {
-            steps {
-                dir('automation') {
-                    sh 'npx playwright install chromium'
-                }
-            }
-        }
-
+        
         stage('Wait for Application') {
             steps {
                 dir('automation') {
@@ -77,8 +70,12 @@ pipeline {
         always {
             sh '''
                 if [ -f app.pid ]; then
-                    kill $(cat app.pid) || true
+                kill $(cat app.pid) || true
                 fi
+
+                rm -rf node_modules
+                rm -rf automation/node_modules
+                rm -rf .next/cache
             '''
         }
 
